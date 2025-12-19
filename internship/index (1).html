@@ -1,0 +1,2936 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vista Ventures</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Notification Banner Styles (Existing top banner) */
+        .notification-banner {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150%);
+            width: fit-content;
+            max-width: 90%;
+            background-color: rgb(76, 0, 130);
+            /* Indigo with 80% opacity */
+            color: white;
+            padding: 8px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+            opacity: 0;
+        }
+
+        .notification-banner.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .notification-banner p {
+            margin: 0;
+            flex-grow: 1;
+            line-height: 1.3;
+        }
+
+        .notification-banner .notification-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .notification-banner button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
+        }
+
+        .notification-banner button.allow-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .notification-banner button.allow-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .notification-banner button.deny-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .notification-banner button.deny-btn:hover {
+            background-color: #da190b;
+            transform: translateY(-2px);
+        }
+
+        /* Home Section */
+        home {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+
+        .video-container .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom right, rgba(0, 0, 50, 0.4), rgba(0, 0, 0, 0.6));
+            z-index: 1;
+        }
+
+        .video-container .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            z-index: 2;
+            padding: 0 20px;
+            /* Added for parallax effect */
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        .video-container .content .title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            animation: fadeInDown 1.2s ease-in-out;
+        }
+
+        .video-container .content .title span {
+            color: indigo;
+        }
+
+        .video-container .content .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        .cta-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            background: indigo;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .cta-btn:hover {
+            background: #009cd1;
+            transform: scale(1.05);
+            /* New hover effect */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Scroll Down Indicator */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-down span {
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translate(-50%, 0);
+            }
+
+            50% {
+                transform: translate(-50%, -10px);
+            }
+        }
+
+        /* Keyframe animation for pulse effect on "Get the App" button */
+        @keyframes pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.03);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        /* Animations for exclusive offers section */
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseTimer {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        @keyframes slideInTop {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px lightgray;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: indigo;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            color: darkblue;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a,
+        .auth a {
+            text-decoration: none;
+            color: black;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: indigo;
+        }
+
+        .auth .login {
+            color: indigo;
+            border: 1px solid indigo;
+        }
+
+        .auth .login:hover {
+            background: indigo;
+            color: white;
+        }
+
+        .auth .signup {
+            background: indigo;
+            color: white;
+        }
+
+        .auth .signup:hover {
+            background: darkblue;
+        }
+
+        /* Video Background */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        .content h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 20px;
+        }
+
+        /* About Section */
+        #about {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Animated Section Titles */
+        .animated-title {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .animated-title.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #about h2 {
+            font-size: 36px;
+            color: indigo;
+            margin-bottom: 20px;
+        }
+
+        #about p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .connect-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .connectbtn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: indigo;
+            color: white;
+            font-weight: bold;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .connectbtn:hover {
+            background-color: darkblue;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            font-size: 28px;
+            color: indigo;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            color: darkblue;
+        }
+
+
+        /* Services Section */
+
+        .text h2 {
+            font-size: 40px;
+            font-weight: 650;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            line-height: 2;
+            text-align: center;
+        }
+
+        .rowitems {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            align-items: center;
+            text-align: center;
+            margin: 20px 30px 10px 30px;
+        }
+
+        .container-box {
+            border: 1px solid #d3d3d3;
+            border-radius: 10px;
+            padding: 40px 20px;
+            transition: all 0.7s ease 0s;
+            cursor: pointer;
+            background-color: #fff;
+            min-height: 300px;
+        }
+
+        .container-image img {
+            height: 120px;
+            width: 120px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .container-box h4 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .container-box p {
+            font-size: 16px;
+            color: #808080;
+        }
+
+        .container-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 5px 20px 50px rgba(78, 78, 78, 0.1);
+            border: 1px solid transparent;
+            border-radius: 0px;
+        }
+
+        /* Service Flip Card Hover Enhancement */
+        .flip-card-front {
+            background: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .flip-card:hover .flip-card-front {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: indigo;
+            transform: scale(0.98);
+        }
+
+        /* ===== LOCATIONS SECTION ===== */
+
+        .locations {
+            padding: 60px 50px;
+            background: #f9f9f9;
+        }
+
+        .package-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .package-title h2 {
+            font-size: 40px;
+            font-weight: 650;
+            line-height: 1.5;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .col-content {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: brightness(95%);
+        }
+
+        .col-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .col-content h5,
+        .col-content p {
+            position: absolute;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            left: 20px;
+        }
+
+        .col-content h5 {
+            bottom: 45px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .col-content p {
+            bottom: 20px;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        .col-content:hover {
+            transform: scale(1.03);
+            filter: brightness(115%);
+            cursor: pointer;
+        }
+
+        /* Optional: Responsive tweak for smaller screens */
+        @media (max-width: 1024px) {
+            .location-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Testimonial Section Styles */
+        .testimonial-slider {
+            background: #f0f4f8;
+            padding: 60px 20px;
+            font-family: 'Segoe UI', sans-serif;
+            color: #333;
+        }
+
+        .testimonial-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .testimonial-title h2 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .testimonial-carousel {
+            position: relative;
+            max-width: 900px;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.6s ease-in-out;
+            width: 300%;
+        }
+
+        .testimonial-card {
+            min-width: 33.33%;
+            box-sizing: border-box;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            user-select: none;
+            text-align: center;
+        }
+
+        .testimonial-card p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #555;
+        }
+
+        .stars {
+            color: #f5b50a;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .testimonial-card h4 {
+            font-weight: 700;
+            color: #222;
+        }
+
+        /* Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(102, 126, 234, 0.8);
+            border: none;
+            color: white;
+            font-size: 26px;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background: #667eea;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        /* Dots */
+        .testimonial-dots {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            margin: 0 6px;
+            border-radius: 50%;
+            border: none;
+            background: #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .testimonial-dot.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 90vh;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column; /* Changed to column to stack elements */
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            width: 100%;
+            color: white;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .contact-section h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 1.2px;
+        }
+
+        .contact-section p {
+            font-size: 17px;
+            max-width: 700px;
+            margin: 0 auto 45px auto;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        /* Contact Form Wrapper */
+        .contact-form-wrapper {
+            position: relative;
+            max-width: 850px;
+            width: 100%; /* Ensure it takes full width within max-width */
+            margin: auto;
+            background: white;
+            border-radius: 16px;
+            padding: 45px 40px;
+            color: #222;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transition: box-shadow 0.3s ease;
+            overflow: hidden; /* For background image */
+            min-height: 650px; /* Increased height for contact form */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .contact-form-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://placehold.co/850x650/f0f8ff/000000?text=Contact+Background'); /* Placeholder image with adjusted height */
+            background-size: cover;
+            background-position: center;
+            filter: blur(3px) brightness(0.7); /* Subtle blur and darken */
+            z-index: -1; /* Behind the form content */
+        }
+
+        .form-fields-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            flex-grow: 1; /* Allow fields group to take available space */
+            align-items: center; /* Center items vertically within the group */
+        }
+
+        .contact-form-group {
+            flex: 1 1 45%;
+            min-width: 260px;
+            margin-bottom: 20px;
+        }
+
+        .contact-form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        .contact-form-label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            z-index: 1; /* Ensure label is above background */
+        }
+
+        .contact-form-input,
+        .contact-form-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            color: #333;
+            z-index: 1; /* Ensure input is above background */
+        }
+        
+        .contact-form-textarea {
+            min-height: 150px; /* Increased min-height for textarea */
+        }
+
+
+        .contact-form-input:focus,
+        .contact-form-textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.7);
+            outline: none;
+        }
+
+        .contact-submit-btn {
+            margin-top: 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 16px 38px;
+            font-size: 17px;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            z-index: 1; /* Ensure button is above background */
+        }
+
+        .contact-submit-btn:hover {
+            background: linear-gradient(135deg, #5a6cd4, #653a93);
+            box-shadow: 0 12px 30px rgba(85, 105, 212, 0.8);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 80px;
+            background-color: #2c3e50;
+            color: #ddd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .foot {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 40px;
+        }
+
+        .footlinks {
+            min-width: 200px;
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .footlinks h4 {
+            margin-top: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .footlinks h4::before {
+            content: "";
+            position: absolute;
+            height: 3px;
+            width: 60px;
+            left: 0;
+            bottom: -10px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .footlinks ul {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .footlinks ul li {
+            margin-bottom: 15px;
+        }
+
+        .footlinks ul li a {
+            font-size: 16px;
+            color: #cccccc;
+            text-decoration: none;
+            display: block;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .footlinks ul li a:hover {
+            transform: translateX(6px);
+            color: #fff;
+        }
+
+        .social {
+            display: flex;
+            gap: 10px; /* Add some gap between social icons */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+
+        .social a {
+            font-size: 22px;
+            height: 40px;
+            width: 40px;
+            color: #2c3e50;
+            background-color: white;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .social a:hover {
+            transform: scale(1.2);
+            background-color: #1a252f;
+            color: white;
+        }
+
+        .end {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid #445566;
+        }
+
+        .end p {
+            font-size: 14px;
+            color: #bbb;
+            letter-spacing: 1px;
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .footlinks {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .social a {
+                margin: 0 8px 10px 0;
+            }
+        }
+
+
+        /* Modal overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 400px;
+            max-width: 100%;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-content h2 {
+            text-align: center;
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-label {
+            margin-top: 15px;
+            color: black;
+        }
+
+        .modal-input {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid grey;
+            margin-top: 5px;
+        }
+
+        .modal-button {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: green;
+            color: white;
+            font-weight: bold;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .modal-button:hover {
+            background-color: darkgreen;
+        }
+
+        .modal-content p {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .modal-content a {
+            color: green;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: gray;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: black;
+        }
+
+        /* Styles for the "Get the App" button */
+        .get-app-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: indigo;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 0.5s, opacity 0.5s linear;
+        }
+
+        .get-app-button.visible {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.5s linear;
+        }
+
+        .get-app-button:hover {
+            background-color: #4B0082;
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .get-app-button:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        .get-app-button .download-icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        /* Scroll to Top Button */
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: indigo;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        #scrollTopBtn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* Styles for the Exclusive Offer section */
+        .exclusive-offer-container {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            transform: none;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 15px;
+            animation: bounceIn 1s ease-out;
+            width: fit-content;
+        }
+
+        #search {
+            position: relative;
+        }
+
+        .exclusive-offer-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            animation: pulseTimer 3s infinite ease-in-out;
+        }
+
+        .exclusive-offer-container p {
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .exclusive-offer-container #offer-countdown-timer {
+            font-size: 16px;
+            font-weight: bold;
+            color: #d9534f;
+            text-align: center;
+            padding: 5px 10px;
+            background-color: #fdd;
+            border-radius: 8px;
+            animation: pulseTimer 1.5s infinite;
+        }
+
+        /* Styles for the new bottom search container */
+        .bottom-search-container {
+            padding: 40px 20px;
+            background: #f0f0f0;
+            text-align: center;
+        }
+
+        .bottom-search-container .search-form {
+            max-width: 600px;
+            margin: auto;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .bottom-search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .bottom-search-container button {
+            background: indigo;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .bottom-search-container button:hover {
+            background: #4B0082;
+        }
+
+        /* Summer India Destinations Section */
+        #summer-india-destinations {
+            padding: 60px 20px;
+            background: #e0f2f7;
+            /* Light blue background for a summer feel */
+            text-align: center;
+            overflow: hidden;
+            /* Hide overflow for scrolling content */
+        }
+
+        #summer-india-destinations .summer-india-title {
+            font-size: 38px;
+            font-weight: 700;
+            color: #2c3e50;
+            /* Darker text for contrast */
+            margin-bottom: 40px;
+        }
+
+        .scrolling-wrapper {
+            display: flex;
+            /* Use flexbox for horizontal layout */
+            width: fit-content;
+            /* Adjust width dynamically based on content */
+            will-change: transform;
+            /* Optimize for animation */
+        }
+
+        .destination-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            flex: 0 0 auto;
+            /* Prevent cards from shrinking */
+            width: 280px;
+            /* Fixed width for each card */
+            height: 200px;
+            /* Fixed height for consistent sizing */
+            margin-right: 25px;
+            /* Gap between cards */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            /* Base transition */
+        }
+
+
+        .destination-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            /* Match container border-radius */
+            transition: transform 0.5s ease;
+            /* Smooth zoom on hover */
+        }
+
+        .destination-card .overlay-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+            /* Gradient overlay */
+            color: white;
+            display: flex;
+            align-items: flex-end;
+            /* Align text to bottom */
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+            opacity: 1;
+            /* Always visible */
+            transition: transform 0.5s ease;
+            /* For subtle text movement on hover */
+        }
+
+        .destination-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .destination-card:hover img {
+            transform: scale(1.08);
+            /* Zoom in effect */
+        }
+
+        .destination-card:hover .overlay-text {
+            transform: translateY(-5px);
+            /* Slight lift for text */
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .exclusive-offer-container {
+                padding: 10px;
+                top: 10px;
+                left: 10px;
+            }
+
+            .exclusive-offer-container img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .exclusive-offer-container p {
+                font-size: 12px;
+            }
+
+            .exclusive-offer-container #offer-countdown-timer {
+                font-size: 14px;
+            }
+
+            .bottom-search-container .search-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .bottom-search-container input,
+            .bottom-search-container button {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .bottom-search-container input {
+                margin-top: 0;
+            }
+        }
+
+        /* New Cricketer Notification Styles */
+        #cricketerNotification {
+            position: fixed;
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(calc(50% + 50px));
+            /* Start off-screen at bottom, centered */
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            z-index: 2100;
+            display: flex;
+            flex-direction: column;
+            /* Stack content vertically */
+            align-items: center;
+            /* Center items horizontally */
+            gap: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            /* Unique bounce-in effect */
+            max-width: 380px;
+            /* Minimize size */
+            text-align: center;
+            background-image: url('C:\Users\Eren Akash\Downloads\6219963263337218570.jpg');
+        }
+
+        #cricketerNotification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(50%);
+            /* Slide to center from bottom */
+        }
+
+        #cricketerNotification img {
+            width: 100px;
+            /* Set image size */
+            height: 100px;
+            border-radius: 50%;
+            /* Make it circular */
+            object-fit: cover;
+            border: none;
+            /* Remove border */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            /* Subtle shadow */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+
+        #cricketerNotification img:hover {
+            transform: scale(1.1);
+            /* Effect on hover */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        #cricketerNotification .notification-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #fff;
+            text-align: center;
+            margin-top: 0;
+            /* Adjust margin as button is below */
+        }
+
+        #cricketerNotification .notification-button {
+            padding: 12px 25px;
+            background-color: #FFD700;
+            /* Gold color for button */
+            color: #333;
+            /* Dark text for contrast */
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            /* Prevent text wrap */
+            margin-top: 20px;
+            /* Space from image/text above */
+        }
+
+        #cricketerNotification .notification-button:hover {
+            background-color: #E6C200;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #cricketerNotification .close-symbol {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        #cricketerNotification .close-symbol:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Overlay for blurring background and preventing scroll */
+        #notificationOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            /* Blur effect */
+            z-index: 2050;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #notificationOverlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive adjustments for new notification */
+        @media (max-width: 600px) {
+            #cricketerNotification {
+                width: 90%;
+                /* Allow it to take more width on small screens */
+                padding: 20px;
+                bottom: 10%;
+                /* Adjust position for smaller screens */
+                transform: translateX(-50%) translateY(calc(50% + 10px));
+            }
+
+            #cricketerNotification.show {
+                transform: translateX(-50%) translateY(50%);
+            }
+
+            #cricketerNotification img {
+                width: 80px;
+                height: 80px;
+            }
+
+            #cricketerNotification .notification-text {
+                font-size: 1rem;
+            }
+
+            #cricketerNotification .notification-button {
+                width: 80%;
+                max-width: 180px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Styles for the registration form */
+        #registrationFormModal {
+            display: none;
+            position: fixed;
+            z-index: 2200;
+            /* Higher than overlay */
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+            opacity: 0;
+            /* Start hidden for animation */
+            transform: scale(0.8);
+            /* Start smaller for animation */
+            transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            /* Bounce animation */
+        }
+
+        #registrationFormModal.show {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .form-container {
+            position: relative;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            /* More pronounced shadow */
+            padding: clamp(25px, 4vw, 40px);
+            /* Responsive padding for more breathing room */
+            max-width: 40vw;
+            /* Set width to 40% of viewport width */
+            max-height: 85vh;
+            /* Increased max-height */
+            min-height: 550px; /* Increased min-height for registration form */
+            width: 100%;
+            /* Ensure it takes full width within max-width */
+            overflow-y: auto;
+            /* Allow scrolling if content overflows */
+            color: white;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+            /* Stronger text shadow */
+            border: 2px solid #FFD700;
+            /* Gold border */
+            overflow: hidden;
+            /* Ensure image animation is clipped to bounds */
+            display: flex;
+            /* Use flexbox to center content vertically */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .form-container-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            z-index: 0;
+            filter: brightness(0.6) blur(2px); /* Darken and blur the video */
+        }
+
+        .form-background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            z-index: 0;
+            /* Behind overlay and content */
+            animation: scaleIn 15s ease-in-out infinite alternate, rotate3d 20s linear infinite;
+            /* Combined animations */
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes rotate3d {
+            0% {
+                transform: rotateY(0deg) rotateX(0deg);
+            }
+
+            25% {
+                transform: rotateY(2deg) rotateX(2deg);
+            }
+
+            50% {
+                transform: rotateY(0deg) rotateX(0deg);
+            }
+
+            75% {
+                transform: rotateY(-2deg) rotateX(-2deg);
+            }
+
+            100% {
+                transform: rotateY(0deg) rotateX(0deg);
+            }
+        }
+
+
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            z-index: 1;
+        }
+
+        .form-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            /* Ensure content takes full width within the container */
+            max-width: clamp(280px, 90%, 350px);
+            /* Constrain internal form width slightly */
+            margin: auto;
+            /* Center content horizontally */
+            flex-grow: 1;
+            /* Allow content to grow within flex container */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* Center form fields vertically */
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            /* Increased margin for better separation from fields */
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            /* Slightly larger, responsive font size */
+            font-weight: 700;
+            color: #FFD700;
+            /* Gold color for heading */
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6);
+            /* Gold glow effect */
+        }
+
+        /* Class for consistent spacing for form labels and inputs */
+        .form-field-group {
+            margin-bottom: 15px;
+            /* Consistent margin for each field group */
+        }
+
+        .form-field-group label {
+            display: block;
+            margin-bottom: 5px;
+            /* Reduced margin */
+            font-weight: 600;
+            font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+            /* Slightly larger font */
+            color: #f0f0f0;
+            /* Lighter color for labels */
+        }
+
+        .form-field-group input[type="text"],
+        .form-field-group input[type="tel"],
+        .form-field-group input[type="email"],
+        .form-field-group input[type="address"] {
+            width: 100%;
+            /* Full width within the form-content */
+            padding: 10px 12px;
+            /* Increased padding slightly */
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            /* More rounded corners */
+            background-color: rgba(255, 255, 255, 0.1);
+            /* More translucent */
+            color: white;
+            font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+            /* Slightly larger font */
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-field-group input[type="text"]::placeholder,
+        .form-field-group input[type="tel"]::placeholder,
+        .form-field-group input[type="email"]::placeholder,
+        .form-field-group input[type="address"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-field-group input[type="text"]:focus,
+        .form-field-group input[type="tel"]:focus,
+        .form-field-group input[type="email"]:focus,
+        .form-field-group input[type="address"]:focus {
+            border-color: #FFEA00;
+            /* Brighter gold on focus */
+            background-color: rgba(255, 255, 255, 0.25);
+            /* More visible on focus */
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 234, 0, 0.8);
+            /* More intense gold glow */
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            /* Increased margin */
+            margin-bottom: 20px;
+            /* Increased margin */
+            font-size: clamp(0.8rem, 1vw, 0.95rem);
+            /* Slightly larger font */
+            color: #f0f0f0;
+        }
+
+        .terms-checkbox input[type="checkbox"] {
+            margin-right: 8px;
+            /* Increased margin */
+            width: 20px;
+            /* Slightly larger checkbox */
+            height: 20px;
+            cursor: pointer;
+            accent-color: #FFD700;
+            /* Gold checkbox color */
+        }
+
+        .form-submit-button {
+            width: 100%;
+            padding: 12px 15px;
+            /* Increased padding */
+            background: linear-gradient(135deg, #FFEA00, #DAA520);
+            /* Brighter gold gradient */
+            color: #444;
+            /* Darker text for better contrast on gold */
+            border: none;
+            border-radius: 12px;
+            /* More rounded corners */
+            font-size: clamp(1rem, 1.4vw, 1.15rem);
+            /* Slightly larger font */
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            margin-top: 15px;
+            /* Increased margin for button */
+        }
+
+        .form-submit-button:hover {
+            background: linear-gradient(135deg, #DAA520, #FFEA00);
+            /* Reverse gradient on hover */
+            transform: translateY(-5px) scale(1.02);
+            /* Stronger lift */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .form-submit-button:active {
+            transform: translateY(-1px) scale(0.99);
+            /* Slight press effect */
+        }
+
+        .form-close-btn {
+            position: absolute;
+            top: 10px;
+            /* Closer to top */
+            right: 10px;
+            /* Closer to right */
+            font-size: clamp(28px, 3.5vw, 32px);
+            /* Smaller responsive close button size */
+            color: rgba(255, 255, 255, 0.95);
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease;
+            z-index: 3;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            /* Shadow for visibility */
+        }
+
+        .form-close-btn:hover {
+            color: white;
+            transform: scale(1.2) rotate(10deg);
+            /* Spin effect on hover */
+        }
+
+        /* Responsive adjustments for registration form */
+        @media (max-width: 768px) {
+            .form-container {
+                max-width: 85vw;
+                /* Allow more width on tablets */
+                max-height: 90vh;
+                /* Adjusted max-height for tablets */
+                padding: clamp(20px, 4vw, 30px);
+                /* Adjust padding for tablets */
+            }
+
+            .form-container h2 {
+                margin-bottom: 15px;
+                /* Slightly less margin on tablets */
+            }
+
+            .form-field-group {
+                margin-bottom: 12px;
+                /* Consistent margin for each field group on tablets */
+            }
+
+            .terms-checkbox {
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .form-container {
+                padding: clamp(15px, 3vw, 25px);
+                /* Further reduce padding for mobile */
+                max-width: 95vw;
+                /* Max width on mobile */
+                max-height: 95vh;
+                /* Adjusted max-height for mobile */
+            }
+
+            .form-container h2 {
+                margin-bottom: 10px;
+                /* Even less margin on mobile */
+            }
+
+            .form-field-group {
+                margin-bottom: 10px;
+                /* Consistent margin for each field group on mobile */
+            }
+
+            .form-field-group label {
+                margin-bottom: 3px;
+                /* Even less margin on mobile */
+            }
+
+            .terms-checkbox {
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            .form-submit-button {
+                margin-top: 10px;
+                /* Adjust button margin for mobile */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Notification Banner (Existing top banner) -->
+    <div id="notificationBanner" class="notification-banner">
+        <p>Allow notifications for updates & deals!</p>
+        <div class="notification-actions">
+            <button class="allow-btn" id="allowNotifications">Allow</button>
+            <button class="deny-btn" id="denyNotifications">Deny</button>
+        </div>
+    </div>
+
+    <nav>
+        <div class="navbar">
+            <a href="#home" class="logo">Vista Ventures</a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About us</a>
+                <a href="#services">Services</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#contact">Contact us</a>
+            </div>
+            <div class="auth">
+                <a class="login" onclick="openModal('loginModal')">Login</a>
+                <a class="signup" onclick="openModal('signupModal')">Sign up</a>
+            </div>
+        </div>
+        <div style="position: fixed; top: 10px; right: 20px; z-index: 9999;">
+            <select onchange="alert('Language switched to: ' + this.value)"
+                style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; margin-top :60px;">
+                <option value="en">🌐 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="hi">🇮🇳 Hindi</option>
+            </select>
+        </div>
+    </nav>
+    <!-- ================= SEARCH BAR SECTION (Original - now effectively disabled) ================= -->
+    <section id="search" style="display: none; padding: 60px 20px; background: #f0f0f0; text-align: center;">
+        <h2 class="animated-title">Find Your Next Destination</h2>
+        <form class="search-form">
+            <input type="text" placeholder="Search destinations or packages..." />
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="video-container">
+            <video autoplay muted loop playsinline>
+                <source src="C:\Users\Eren Akash\Downloads\bgvid.mp4" type="video/mp4" />
+                <!-- Fallback image in case video fails to load -->
+                <img src="https://placehold.co/1920x1080/000000/FFFFFF?text=Video+Not+Available" alt="Video Placeholder">
+            </video>
+
+            <!-- Overlay -->
+            <div class="overlay"></div>
+
+            <!-- Content -->
+            <div class="content">
+                <h1 class="title">Welcome to <span>Vista Ventures</span></h1>
+                <p class="subtitle">Explore travel packages, book trips, and enjoy your journey!</p>
+                <a href="#services" class="cta-btn">Start Exploring</a>
+            </div>
+
+            <!-- Exclusive Offer Banner with Countdown - Now positioned inside the video container -->
+            <div class="exclusive-offer-container">
+                <img src="C:\Users\Eren Akash\Downloads\6206290213475567298.jpg" alt="Exclusive Offer"
+                    onerror="this.onerror=null;this.src='https://placehold.co/100x100/FF5733/FFFFFF?text=Offer';" />
+                <p>Exclusive Offer Ends!</p>
+                <div id="offer-countdown-timer"></div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-down">
+                <span>&#x25BC;</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- The "Get the App" button is now fixed to the bottom right and visible across all sections -->
+    <button class="get-app-button">
+        <span class="download-icon">&#x1F4E5;</span>
+        <!-- Unicode for download icon with span for styling -->
+        Get the App
+    </button>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2 class="animated-title">About Vista Ventures</h2>
+
+        <p>
+            Vista Ventures is your gateway to unforgettable travel experiences. Our mission is to make travel seamless,
+            affordable, and inspiring. With a network of global partners, expert travel consultants, and 24/7 support,
+            we help
+            you craft journeys that match your dreams.
+        </p>
+
+        <p>
+            Whether you're planning a romantic escape, a family vacation, a solo adventure, or a corporate retreat —
+            Vista Ventures
+            ensures your journey is hassle-free and truly memorable.
+        </p>
+
+        <p>
+            Over the years, we have curated exclusive travel packages tailored to your preferences, covering everything
+            from
+            luxurious resorts to off-the-beaten-path adventures. Our passionate team continuously explores new
+            destinations
+            and travel trends to keep your experiences fresh and exciting.
+        </p>
+
+        <div class="connect-section">
+            <a href="" class="connectbtn">Connect with us!</a>
+            <div class="social-icons">
+                <a href=""><i class='bx bxl-facebook'></i></a>
+                <a href=""><i class='bx bxl-instagram'></i></a>
+                <a href=""><i class='bx bxl-twitter'></i></a>
+                <a href=""><i class='bx bxl-linkedin'></i></a>
+                <a href=""><i class='bx bxl-youtube'></i></a>
+                <a href=""><i class='bx bxl-wordpress'></i></a>
+                <a href=""><i class='bx bxl-github'></i></a>
+                <a href=""><i class='bx bxl-amazon'></i></a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- ================= ADVANCED SERVICES SECTION WITH FLIP EFFECT ================= -->
+    <section id="services" style="background: #f8f9fa; padding: 60px 20px; text-align: center;">
+        <h2 style="font-size: 40px; color: indigo; margin-bottom: 40px;">Our Premium Services</h2>
+        <style>
+            .flip-card {
+                background-color: transparent;
+                width: 100%;
+                height: 280px;
+                perspective: 1000px;
+            }
+
+            .flip-card-inner {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                transition: transform 0.6s;
+                transform-style: preserve-3d;
+            }
+
+            .flip-card:hover .flip-card-inner {
+                transform: rotateY(180deg);
+            }
+
+            .flip-card-front,
+            .flip-card-back {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                backface-visibility: hidden;
+                border-radius: 16px;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+                padding: 30px 20px;
+            }
+
+            .flip-card-front {
+                background: white;
+            }
+
+            .flip-card-back {
+                background: indigo;
+                color: white;
+                transform: rotateY(180deg);
+            }
+
+            .service-icon {
+                font-size: 40px;
+                color: indigo;
+                margin-bottom: 20px;
+            }
+
+            .flip-card-back .service-icon {
+                color: #fff;
+            }
+
+            .service-title {
+                font-size: 22px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .service-desc {
+                font-size: 15px;
+                color: #666;
+            }
+
+            .flip-card-back .service-desc {
+                color: #ddd;
+            }
+
+            .learn-btn {
+                margin-top: 20px;
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #fff;
+                color: indigo;
+                border-radius: 8px;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            .learn-btn:hover {
+                background-color: #ddd;
+            }
+
+            .service-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+                max-width: 1100px;
+                margin: auto;
+            }
+        </style>
+
+        <div class="service-grid">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="service-icon"><i class='bx bxs-plane-take-off'></i></div>
+                        <div class="service-title">Flight Booking</div>
+                        <div class="service-desc">Affordable and reliable booking services with 24/7 support.</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="service-title">Fly Anywhere</div>
+                        <div class="service-desc">We cover over 150+ international and domestic destinations at best
+                            prices.</div>
+                        <a href="#" class="learn-btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="service-icon"><i class='bx bxs-hotel'></i></div>
+                        <div class="service-title">Hotel Reservations</div>
+                        <div class="service-desc">Stay at top-rated hotels at your destination with best value.</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="service-title">Comfort Stay</div>
+                        <div class="service-desc">From budget to luxury, book accommodations instantly with us.</div>
+                        <a href="#" class="learn-btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="service-icon"><i class='bx bxs-car'></i></div>
+                        <div class="service-title">Local Transport</div>
+                        <div class="service-desc">Pickup/drop, guided rentals, and seamless travel options available.
+                        </div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="service-title">Move Easily</div>
+                        <div class="service-desc">Taxi, private cars, and group transport covered in all major cities.
+                        </div>
+                        <a href="#" class="learn-btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="service-icon"><i class='bx bxs-bowl-hot'></i></div>
+                        <div class="service-title">Culinary Experience</div>
+                        <div class="service-desc">Discover local cuisines, curated food trails and chef dinners.</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="service-title">Taste Culture</div>
+                        <div class="service-desc">From street food to fine dining – taste authentic local flavor.</div>
+                        <a href="#" class="learn-btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+ <!-- ================= ALTERNATE LOCATION SECTION ================= -->
+    <section id="locations" style="padding: 60px 30px; background: #fff; text-align: center;">
+        <h2 style="font-size: 40px; color: indigo; margin-bottom: 50px;">Top Travel Destinations</h2>
+        <style>
+            .location-card {
+                position: relative;
+                overflow: hidden;
+                border-radius: 15px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+                transition: transform 0.4s;
+                height: 300px;
+                /* Ensures the image fills a consistent height */
+            }
+
+            .location-card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.6s ease;
+            }
+
+            .location-card:hover img {
+                transform: scale(1.1);
+            }
+
+            .location-card .info {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                /* Ensure it spans full width */
+                right: 0;
+                /* Ensure it spans full width */
+                background: none;
+                /* Removed background */
+                color: white;
+                padding: 15px 20px;
+                /* Adjusted padding to give some space around text */
+                text-align: left;
+                /* Add a subtle text shadow for readability over image */
+                text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+            }
+
+            .location-card .info h5 {
+                margin: 0;
+                font-size: 22px;
+            }
+
+            .location-card .info p {
+                margin-top: 5px;
+                font-size: 14px;
+            }
+        </style>
+
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: auto;">
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\l1.jpg" alt="Kashmir">
+                <div class="info">
+                    <h5>Kashmir</h5>
+                    <p>India</p>
+                </div>
+            </div>
+
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t2.jpg" alt="Istanbul">
+                <div class="info">
+                    <h5>Istanbul</h5>
+                    <p>Turkey</p>
+                </div>
+            </div>
+
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t3.jpg" alt="Paris">
+                <div class="info">
+                    <h5>Paris</h5>
+                    <p>France</p>
+                </div>
+            </div>
+
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t4.jpg" alt="Bali">
+                <div class="info">
+                    <h5>Bali</h5>
+                    <p>Indonesia</p>
+                </div>
+            </div>
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t5.jpg" alt="Dubai">
+                <div class="info">
+                    <h5>Dubai</h5>
+                    <p>United Arab Emirates</p>
+                </div>
+            </div>
+
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t6.jpg" alt="Geneva">
+                <div class="info">
+                    <h5>Geneva</h5>
+                    <p>Switzerland</p>
+                </div>
+            </div>
+
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t7.jpg" alt="Port Blair">
+                <div class="info">
+                    <h5>Port Blair</h5>
+                    <p>Andaman & Nicobar</p>
+                </div>
+            </div>
+
+            <div class="location-card">
+                <img src="C:\Users\Eren Akash\Downloads\t8.jpg" alt="Rome">
+                <div class="info">
+                    <h5>Rome</h5>
+                    <p>Italy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Section: Inspire your summer in India -->
+    <section id="summer-india-destinations">
+        <h2 class="summer-india-title">Inspire your summer in India</h2>
+        <div class="destination-cards-grid">
+            <div class="scrolling-wrapper">
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6210793813102936989.jpg" alt="Goa Thrills">
+                    <div class="overlay-text">Must-try Goa thrills</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6210793813102936990.jpg" alt="Manali Adventures">
+                    <div class="overlay-text">Manali adventure gems</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6210793813102936991.jpg" alt="Leh-Ladakh Heritage">
+                    <div class="overlay-text">Leh-Ladakh heritage wonders</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6210793813102936992.jpg" alt="Darjeeling Hills">
+                    <div class="overlay-text">Darjeeling hillside charm</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6208480595256919351.jpg" alt="Ooty">
+                    <div class="overlay-text">Ooty Hill Station</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6208480595256919352.jpg" alt="Kodaikanal">
+                    <div class="overlay-text">Kodaikanal Serenity</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6208480595256919356.jpg" alt="Munnar">
+                    <div class="overlay-text">Munnar Green Retreats</div>
+                </div>
+                <div class="destination-card">
+                    <img src="C:\Users\Eren Akash\Downloads\6208480595256919355.jpg" alt="Mysore">
+                    <div class="overlay-text">Mysore Royal Charms</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Search Container below Top Travel Destinations -->
+    <section class="bottom-search-container">
+        <h2 style="font-size: 36px; margin-bottom: 30px; color: #333;">Can't find your destination? Search below!</h2>
+        <form class="search-form">
+            <input type="text" placeholder="Search destinations or packages..." />
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+
+    <section class="testimonial-slider" id="testimonials">
+        <div class="testimonial-title">
+            <h2 class="animated-title">What Our Travelers Say</h2>
+        </div>
+
+        <div class="testimonial-carousel">
+            <div class="testimonial-track">
+                <div class="testimonial-card">
+                    <p>"Absolutely loved the Kashmir trip! The serene landscapes and the warm hospitality made it an
+                        unforgettable experience. Highly recommend Vista Ventures for seamless travel planning."</p>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <h4>- Ananya R.</h4>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Paris was magical. The local guided tours arranged by Vista Ventures were insightful, and the
+                        hotel stay was perfect. We truly experienced the city of love to its fullest!"</p>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <h4>- Priya K.</h4>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Bali was stunning! The beachside resorts and the cultural experiences arranged by Vista Ventures
+                        were beyond my expectations. A perfect blend of relaxation and adventure."</p>
+                    <div class="stars">⭐⭐⭐⭐☆</div>
+                    <h4>- Rohan M.</h4>
+                </div>
+            </div>
+
+            <button class="prev-btn">‹</button>
+            <button class="next-btn">›</button>
+        </div>
+
+        <div class="testimonial-dots"></div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // "Get the App" Button Visibility after Home Section
+            const homeSection = document.getElementById('home');
+            const getAppButton = document.querySelector('.get-app-button');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // If the home section is no longer intersecting (i.e., scrolled past)
+                    if (!entry.isIntersecting) {
+                        getAppButton.classList.add('visible');
+                    } else {
+                        getAppButton.classList.remove('visible');
+                    }
+                });
+            }, { threshold: 0 }); // Trigger when 0% of the target is visible
+
+            observer.observe(homeSection);
+
+            // Countdown Timer Logic for Exclusive Offer
+            const countdownElement = document.getElementById('offer-countdown-timer');
+            // Check if the countdownElement exists before trying to manipulate it
+            if (countdownElement) {
+                // Set the end date for the offer (June 12th, 2025, 23:59:59)
+                // Note: Months are 0-indexed in JavaScript (June is 5)
+                const endDate = new Date(2025, 5, 12, 23, 59, 59).getTime();
+
+                function updateCountdown() {
+                    const now = new Date().getTime();
+                    const distance = endDate - now;
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    if (distance < 0) {
+                        countdownElement.innerHTML = "Offer Expired!";
+                        clearInterval(countdownInterval);
+                        // Optionally hide the offer container when expired
+                        const offerContainer = document.querySelector('.exclusive-offer-container');
+                        if (offerContainer) {
+                            offerContainer.style.display = 'none';
+                        }
+                    } else {
+                        countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    }
+                }
+
+                const countdownInterval = setInterval(updateCountdown, 1000);
+                updateCountdown(); // Initial call to display immediately
+            }
+
+
+            // COUNTER ANIMATION (for "Our Impact in Numbers" section)
+            const counters = document.querySelectorAll('.counter');
+            const speed = 150;
+
+            counters.forEach(counter => {
+                const animateCounter = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const increment = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(animateCounter, 20);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                animateCounter();
+            });
+
+            // Notification Banner Logic
+            const notificationBanner = document.getElementById('notificationBanner');
+            const allowBtn = document.getElementById('allowNotifications');
+            const denyBtn = document.getElementById('denyNotifications');
+
+            // Show banner after 4 seconds
+            setTimeout(() => {
+                notificationBanner.classList.add('show');
+            }, 4000);
+
+            // Hide banner when Allow button is clicked
+            allowBtn.addEventListener('click', () => {
+                notificationBanner.classList.remove('show');
+                // Optional: You can add logic here to actually request notification permission
+                // For demonstration, we just hide the banner.
+                // console.log("Notifications allowed!");
+            });
+
+            // Hide banner when Deny button is clicked
+            denyBtn.addEventListener('click', () => {
+                notificationBanner.classList.remove('show');
+                // console.log("Notifications denied!");
+            });
+
+            // Testimonial cards carousel logic (re-implemented)
+            const testimonialTrack = document.querySelector('.testimonial-track');
+            if (testimonialTrack) {
+                const testimonialCards = Array.from(testimonialTrack.children);
+                const prevBtn = document.querySelector('.prev-btn');
+                const nextBtn = document.querySelector('.next-btn');
+                const dotsContainer = document.querySelector('.testimonial-dots');
+
+                let currentTestimonialIndex = 0;
+
+                // Adjust track width dynamically for carousel effect
+                testimonialTrack.style.width = `${testimonialCards.length * 100}%`;
+                testimonialCards.forEach(card => {
+                    // Each card takes 1/Nth of the total track width
+                    card.style.flex = `0 0 ${100 / testimonialCards.length}%`;
+                });
+
+                // Create dots
+                dotsContainer.innerHTML = ''; // Clear existing dots if any
+                testimonialCards.forEach((_, index) => {
+                    const dot = document.createElement('button');
+                    dot.classList.add('testimonial-dot');
+                    if (index === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => {
+                        goToTestimonialSlide(index);
+                    });
+                    dotsContainer.appendChild(dot);
+                });
+
+                const testimonialDots = Array.from(dotsContainer.children);
+
+                function updateTestimonialSlider() {
+                    // Calculate translation based on current index and percentage width of each card
+                    testimonialTrack.style.transform = `translateX(-${currentTestimonialIndex * (100 / testimonialCards.length)}%)`;
+                    testimonialDots.forEach(dot => dot.classList.remove('active'));
+                    testimonialDots[currentTestimonialIndex].classList.add('active');
+                }
+
+                function goToTestimonialSlide(index) {
+                    currentTestimonialIndex = index;
+                    updateTestimonialSlider();
+                }
+
+                prevBtn.addEventListener('click', () => {
+                    currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonialCards.length) % testimonialCards.length;
+                    updateTestimonialSlider();
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonialCards.length;
+                    updateTestimonialSlider();
+                });
+
+                // Auto-slide every 6 seconds
+                setInterval(() => {
+                    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonialCards.length;
+                    updateTestimonialSlider();
+                }, 6000);
+            }
+
+            // Summer India Destinations Scrolling Logic
+            const scrollingWrapper = document.querySelector('.scrolling-wrapper');
+            const originalDestinationCards = document.querySelectorAll('#summer-india-destinations .destination-card'); // Select original cards
+
+            // Clear existing clones if any, to avoid excessive duplication on re-run
+            while (scrollingWrapper.children.length > originalDestinationCards.length) {
+                scrollingWrapper.removeChild(scrollingWrapper.lastChild);
+            }
+
+            // Duplicate cards for seamless looping
+            originalDestinationCards.forEach(card => {
+                const clonedCard = card.cloneNode(true);
+                scrollingWrapper.appendChild(clonedCard);
+            });
+
+            let scrollPosition = 0;
+            const scrollSpeed = 0.3; // Pixels per frame, adjust for slower/faster
+            let currentDirection = 1; // 1 for content moving left (R->L visual), -1 for content moving right (L->R visual)
+            let animationFrameId;
+
+            // Calculate total width of one set of original cards (including margins)
+            let totalOriginalContentWidth = 0;
+            originalDestinationCards.forEach(card => {
+                totalOriginalContentWidth += card.offsetWidth + parseInt(getComputedStyle(card).marginRight);
+            });
+
+            function animateScroll() {
+                scrollPosition += scrollSpeed * currentDirection;
+
+                // Logic for reversing direction after one full rotation
+                if (currentDirection === 1) { // Content is moving left (R->L visual)
+                    if (scrollPosition >= totalOriginalContentWidth) {
+                        currentDirection = -1; // Change to moving right (L->R visual)
+                        // Snap to the end of the cloned section before reversing to ensure smooth transition
+                        scrollPosition = totalOriginalContentWidth;
+                    }
+                } else { // Content is moving right (L->L visual)
+                    if (scrollPosition <= 0) {
+                        currentDirection = 1; // Change to moving left (R->L visual)
+                        // Snap to the start of the cloned section before reversing
+                        scrollPosition = 0;
+                    }
+                }
+
+                scrollingWrapper.style.transform = `translateX(${-scrollPosition}px)`;
+                animationFrameId = requestAnimationFrame(animateScroll);
+            }
+
+            function startScrolling() {
+                if (!animationFrameId) { // Only start a new animation frame if one isn't already running
+                    animateScroll();
+                }
+            }
+
+            // Initial start of scrolling
+            startScrolling();
+
+            // Scroll to Top Button Logic
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) { // Show button after scrolling 300px
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Intersection Observer for Animated Titles
+            const animatedTitles = document.querySelectorAll('.animated-title');
+
+            const titleObserverOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.5 // Trigger when 50% of the element is visible
+            };
+
+            const titleObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, titleObserverOptions);
+
+            animatedTitles.forEach(title => {
+                titleObserver.observe(title);
+            });
+
+            // Parallax effect for hero content
+            const heroContent = document.querySelector('#home .content');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                // Adjust the division factor for more/less parallax effect
+                heroContent.style.transform = `translate(-50%, calc(-50% + ${scrollY * 0.2}px))`;
+            });
+
+            // Cricketer Notification Logic
+            const cricketerNotification = document.getElementById('cricketerNotification');
+            const notificationOverlay = document.getElementById('notificationOverlay');
+            const closeCricketerNotification = document.getElementById('closeCricketerNotification');
+            const notificationButton = document.querySelector('#cricketerNotification .notification-button');
+            const registrationFormModal = document.getElementById('registrationFormModal');
+            const closeFormBtn = document.getElementById('closeFormBtn');
+            const formCard = document.querySelector('#registrationFormModal .form-card');
+
+
+            setTimeout(() => {
+                cricketerNotification.classList.add('show');
+                notificationOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }, 10000); // Show after 10 seconds
+
+            closeCricketerNotification.addEventListener('click', () => {
+                cricketerNotification.classList.remove('show');
+                notificationOverlay.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+            });
+
+            notificationButton.addEventListener('click', () => {
+                cricketerNotification.classList.remove('show'); // Hide cricketer notification
+                registrationFormModal.classList.add('show'); // Show registration form
+                notificationOverlay.classList.add('show'); // Keep overlay for form
+                document.body.style.overflow = 'hidden'; // Ensure scrolling is still prevented
+
+                // Trigger the fill animation for the form-card
+                if (formCard) {
+                    formCard.classList.add('animate-fill');
+                }
+            });
+
+            closeFormBtn.addEventListener('click', () => {
+                registrationFormModal.classList.remove('show'); // Hide form
+                notificationOverlay.classList.remove('show'); // Hide overlay
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+
+                // Remove the fill animation class when closing
+                if (formCard) {
+                    formCard.classList.remove('animate-fill');
+                }
+            });
+        });
+    </script>
+
+
+    <section id="contact" class="contact-section">
+        <h2 class="animated-title">Get in Touch</h2>
+        <p>Have a question, need help with a booking, or just want to chat? Send us a message and we'll get back to you as
+            soon as possible!</p>
+
+        <form action="#" method="post" class="contact-form-wrapper">
+            <div class="form-fields-group">
+                <div class="contact-form-group">
+                    <label for="name" class="contact-form-label">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required
+                        class="contact-form-input">
+                </div>
+
+                <div class="contact-form-group">
+                    <label for="email" class="contact-form-label">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required
+                        class="contact-form-input">
+                </div>
+
+                <div class="contact-form-group full-width">
+                    <label for="subject" class="contact-form-label">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Subject" required
+                        class="contact-form-input">
+                </div>
+
+                <div class="contact-form-group full-width">
+                    <label for="message" class="contact-form-label">Your Message</label>
+                    <textarea id="message" name="message" rows="6" placeholder="Type your message here..." required
+                        class="contact-form-textarea"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="contact-submit-btn">
+                Send Message
+            </button>
+        </form>
+
+        <script>
+            // Add input focus effect for contact form
+            const contactInputs = document.querySelectorAll('#contact .contact-form-input, #contact .contact-form-textarea');
+            contactInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.classList.add('focused'); // Add a class for focus styling
+                });
+                input.addEventListener('blur', () => {
+                    input.classList.remove('focused'); // Remove the class on blur
+                });
+            });
+
+            // Button hover effect for contact form
+            const contactBtn = document.querySelector('#contact .contact-submit-btn');
+            contactBtn.addEventListener('mouseenter', () => {
+                contactBtn.style.background = 'linear-gradient(135deg, #5a6cd4, #653a93)';
+                contactBtn.style.boxShadow = '0 12px 30px rgba(85, 105, 212, 0.8)';
+            });
+            contactBtn.addEventListener('mouseleave', () => {
+                contactBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                contactBtn.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.6)';
+            });
+        </script>
+    </section>
+
+
+
+    <section class="footer">
+        <div class="foot">
+            <div class="footer-content">
+                <div class="footlinks">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="">Register</a></li>
+                        <li><a href="">About Us</a></li>
+                        <li><a href="">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footlinks">
+                    <h4>Connect</h4>
+                    <div class="social">
+                        <a href=""><i class='bx bxl-facebook'></i></a>
+                        <a href=""><i class='bx bxl-instagram'></i></a>
+                        <a href=""><i class='bx bxl-twitter'></i></a>
+                        <a href=""><i class='bx bxl-linkedin'></i></a>
+                        <a href=""><i class='bx bxl-youtube'></i></a>
+                        <a href=""><i class='bx bxl-wordpress'></i></a>
+                        <a href=""><i class='bx bxl-github'></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="end">
+            <p>Copyright © 2025 Vista Travels All Rights Reserved.<br>Website developed by: Sachin Kumar</p>
+        </div>
+    </section>
+
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form class="modal-form">
+                <label class="modal-label">Email</label>
+                <input type="email" placeholder="Enter your email" required class="modal-input" />
+                <label class="modal-label">Password</label>
+                <input type="password" placeholder="Enter your password" required class="modal-input" />
+                <button type="submit" class="modal-button">Login</button>
+                <p>Don't have an account? <a onclick="switchModal('loginModal', 'signupModal')">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form class="modal-form">
+                <label class="modal-label">Full Name</label>
+                <input type="text" placeholder="Enter your name" required class="modal-input" />
+                <label class="modal-label">Email</label>
+                <input type="email" placeholder="Enter your email" required class="modal-input" />
+                <label class="modal-label">Password</label>
+                <input type="password" placeholder="Create password" required class="modal-input" />
+                <button type="submit" class="modal-button">Register</button>
+                <p>Already have an account? <a onclick="switchModal('signupModal', 'loginModal')">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button HTML -->
+    <button id="scrollTopBtn">⬆</button>
+
+    <!-- New Cricketer Notification Overlay -->
+    <div id="notificationOverlay"></div>
+
+    <!-- New Cricketer Notification -->
+    <div id="cricketerNotification">
+        <span class="close-symbol" id="closeCricketerNotification">&times;</span>
+        <img src="C:\Users\Eren Akash\Downloads\6215415107719120348.jpg" alt="Proteas Cricketer">
+        <p class="notification-text">Get the chance to meet Proteas Cricketers 🇿🇦</p>
+        <button class="notification-button">Click Here</button>
+    </div>
+
+    <!-- Registration Form Modal -->
+    <div id="registrationFormModal">
+        <div class="form-container">
+            <!-- Video Background for the form modal itself -->
+            <video autoplay muted loop playsinline class="form-container-video">
+                <source src="C:\Users\Eren Akash\Downloads\bgvid.mp4" type="video/mp4">
+                <img src="C:\Users\Eren Akash\Downloads\6219963263337218570.jpg" alt="Video Placeholder">
+            </video>
+            <span class="form-close-btn" id="closeFormBtn">&times;</span>
+            <div class="form-content">
+                <h2>Register for the Meet & Greet!</h2>
+                <form onsubmit="alert('Form Submitted! We will contact you soon.'); return false;">
+                    <div class="form-field-group">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Your full name" required>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label for="phoneNumber">Phone Number:</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="e.g., +1234567890" required>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label for="emailAddress">Email Address:</label>
+                        <input type="email" id="emailAddress" name="emailAddress" placeholder="your.email@example.com"
+                            required>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label for="address">Address:</label>
+                        <input type="address" id="address" name="address" placeholder="Your full address" required>
+                    </div>
+
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I accept the terms and conditions</label>
+                    </div>
+
+                    <button type="submit" class="form-submit-button">Submit Registration</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Scripts -->
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchModal(fromId, toId) {
+            closeModal(fromId);
+            openModal(toId);
+        }
+    </script>
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vista Ventures</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        nav {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px lightgray;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: indigo;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo:hover {
+            color: darkblue;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a,
+        .auth a {
+            text-decoration: none;
+            color: black;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: indigo;
+        }
+
+        .auth .login {
+            color: indigo;
+            border: 1px solid indigo;
+        }
+
+        .auth .login:hover {
+            background: indigo;
+            color: white;
+        }
+
+        .auth .signup {
+            background: indigo;
+            color: white;
+        }
+
+        .auth .signup:hover {
+            background: darkblue;
+        }
+
+        /* Video Background */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        .content h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 20px;
+        }
+
+        /* About Section */
+        #about {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #about h2 {
+            font-size: 36px;
+            color: indigo;
+            margin-bottom: 20px;
+        }
+
+        #about p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        .connect-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .connectbtn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: indigo;
+            color: white;
+            font-weight: bold;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .connectbtn:hover {
+            background-color: darkblue;
+        }
+
+        .social-icons a {
+            margin: 0 10px;
+            font-size: 28px;
+            color: indigo;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            color: darkblue;
+        }
+
+
+        /*  */
+
+        .text h2 {
+            font-size: 40px;
+            font-weight: 650;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            line-height: 2;
+            text-align: center;
+        }
+
+        .rowitems {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            /* increased minimum size */
+            gap: 25px;
+            align-items: center;
+            text-align: center;
+            margin: 20px 30px 10px 30px;
+        }
+
+        .container-box {
+            border: 1px solid #d3d3d3;
+            border-radius: 10px;
+            /* slightly rounder corners */
+            padding: 40px 20px;
+            /* more padding for larger box feel */
+            transition: all 0.7s ease 0s;
+            cursor: pointer;
+            background-color: #fff;
+            min-height: 300px;
+            /* ensures all boxes are taller */
+        }
+
+        .container-image img {
+            height: 120px;
+            /* slightly bigger image */
+            width: 120px;
+            padding: 10px;
+            margin-bottom: 20px;
+            background:black;
+        }
+
+        .container-box h4 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .container-box p {
+            font-size: 16px;
+            color: hsla(0, 0%, 1%, 0.795);
+            font-weight: bold;
+        }
+
+        .container-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 5px 20px 50px rgba(78, 78, 78, 0.1);
+            border: 1px solid transparent;
+            border-radius: 0px;
+        }
+
+        /* ===== LOCATIONS SECTION ===== */
+
+        .locations {
+            padding: 60px 50px;
+            background: #f9f9f9;
+        }
+
+        .package-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .package-title h2 {
+            font-size: 40px;
+            font-weight: 650;
+            line-height: 1.5;
+        }
+
+        .location-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            /* Fixed 4 cards per row */
+            gap: 30px;
+        }
+
+        .col-content {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+            filter: brightness(95%);
+        }
+
+        .col-content img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .col-content h5,
+        .col-content p {
+            position: absolute;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+            left: 20px;
+        }
+
+        .col-content h5 {
+            bottom: 45px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .col-content p {
+            bottom: 20px;
+            font-size: 17px;
+            font-weight: 400;
+        }
+
+        .col-content:hover {
+            transform: scale(1.03);
+            filter: brightness(115%);
+            cursor: pointer;
+        }
+
+        /* Optional: Responsive tweak for smaller screens */
+        @media (max-width: 1024px) {
+            .location-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .location-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Testimonial */
+        .testimonial-slider {
+            padding: 60px 30px;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        .testimonial-title h2 {
+            font-size: 40px;
+            font-weight: 650;
+            margin-bottom: 30px;
+        }
+
+        .testimonial-carousel {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            overflow: hidden;
+            height: 260px;
+            /* Increased height */
+        }
+
+        .testimonial-card {
+            position: absolute;
+            width: 100%;
+            padding: 25px 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .testimonial-card.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 1;
+        }
+
+        .testimonial-card p {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .testimonial-card .stars {
+            color: #ffc107;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-card h4 {
+            font-size: 16px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /*  */
+        /* Reset box-sizing globally to avoid width issues */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        .contact-section {
+            background: #e0e0e0;
+            /* darker bg for contrast */
+            min-height: 90vh;
+            /* full height */
+            padding: 50px 20px;
+            /* enough space inside */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* prevent overflow */
+            width: 100%;
+            /* full width */
+        }
+
+        .contact-container {
+            max-width: 800px;
+            width: 100%;
+            /* fill parent width */
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #ddd;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Form styling */
+        .contact-form {
+            width: 100%;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.8px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        .btn-submit {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #357ABD;
+        }
+
+
+        /*  */
+        .footer {
+            margin-top: 80px;
+            background-color: #2c3e50;
+            /* dark navy blue */
+            color: #ddd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .foot {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 40px;
+        }
+
+        .footlinks {
+            min-width: 200px;
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .footlinks h4 {
+            margin-top: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .footlinks h4::before {
+            content: "";
+            position: absolute;
+            height: 3px;
+            width: 60px;
+            left: 0;
+            bottom: -10px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .footlinks ul {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .footlinks ul li {
+            margin-bottom: 15px;
+        }
+
+        .footlinks ul li a {
+            font-size: 16px;
+            color: #cccccc;
+            text-decoration: none;
+            display: block;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .footlinks ul li a:hover {
+            transform: translateX(6px);
+            color: #fff;
+        }
+
+        .social a {
+            font-size: 22px;
+            margin: 0 6px 12px 0;
+            height: 40px;
+            width: 40px;
+            color: #2c3e50;
+            background-color: white;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .social a:hover {
+            transform: scale(1.2);
+            background-color: #1a252f;
+            color: white;
+        }
+
+        .end {
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 1px solid #445566;
+        }
+
+        .end p {
+            font-size: 14px;
+            color: #bbb;
+            letter-spacing: 1px;
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .footlinks {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .social a {
+                margin: 0 8px 10px 0;
+            }
+        }
+
+
+
+
+        /* Modal overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 400px;
+            max-width: 100%;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .modal-content h2 {
+            text-align: center;
+            color: green;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            color: black;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid grey;
+            margin-top: 5px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: green;
+            color: white;
+            font-weight: bold;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: darkgreen;
+        }
+
+        .modal-content p {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .modal-content a {
+            color: green;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: gray;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="navbar">
+            <a href="#home" class="logo">Vista Ventures</a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About us</a>
+                <a href="#services">Services</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#contact">Contact us</a>
+            </div>
+            <div class="auth">
+                <a class="login" onclick="openModal('loginModal')">Login</a>
+                <a class="signup" onclick="openModal('signupModal')">Sign up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="video-container">
+            <video loop autoplay>
+                <source src="C:\Users\Eren Akash\Downloads\bgvid.mp4" type="video/mp4" />
+            </video>
+            <div class="content">
+                <h2>Welcome to Vista Ventures</h2>
+                <p>Explore travel packages, book trips, and enjoy your journey!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Vista Ventures</h2>
+
+        <p style="font-size: 18px; line-height: 1.8; color: #333; margin-bottom: 20px;">
+            Vista Ventures is your gateway to unforgettable travel experiences. Our mission is to make travel seamless,
+            affordable, and inspiring. With a network of global partners, expert travel consultants, and 24/7 support,
+            we help
+            you craft journeys that match your dreams.
+        </p>
+
+        <p style="font-size: 18px; line-height: 1.8; color: #333; margin-bottom: 20px;">
+            Whether you're planning a romantic escape, a family vacation, a solo adventure, or a corporate retreat —
+            Vista Ventures
+            ensures your journey is hassle-free and truly memorable.
+        </p>
+
+        <p style="font-size: 18px; line-height: 1.8; color: #333; margin-bottom: 20px;">
+            Over the years, we have curated exclusive travel packages tailored to your preferences, covering everything
+            from
+            luxurious resorts to off-the-beaten-path adventures. Our passionate team continuously explores new
+            destinations
+            and travel trends to keep your experiences fresh and exciting.
+        </p>
+
+        <div class="connect-section">
+            <a href="" class="connectbtn">Connect with us!</a>
+            <div class="social-icons">
+                <a href=""><i class='bx bxl-facebook'></i></a>
+                <a href=""><i class='bx bxl-instagram'></i></a>
+                <a href=""><i class='bx bxl-twitter'></i></a>
+                <a href=""><i class='bx bxl-linkedin'></i></a>
+                <a href=""><i class='bx bxl-youtube'></i></a>
+                <a href=""><i class='bx bxl-wordpress'></i></a>
+                <a href=""><i class='bx bxl-github'></i></a>
+                <a href=""><i class='bx bxl-amazon'></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" id="services">
+        <div class="text">
+            <h2>We have the best services available for you!</h2>
+        </div>
+        <div class="rowitems">
+            <div class="container-box">
+                <div class="container-image">
+                    <img src="C:\Users\Eren Akash\Downloads\1a.jpg" alt="Flight Services">
+                </div>
+                <h4>Flight Services</h4>
+                <p>Arrival and Departure</p>
+            </div>
+
+            <div class="container-box">
+                <div class="container-image">
+                    <img src="C:\Users\Eren Akash\Downloads\2a.jpg" alt="Food Services">
+                </div>
+                <h4>Food Services</h4>
+                <p>Catering</p>
+            </div>
+
+            <div class="container-box">
+                <div class="container-image">
+                    <img src="C:\Users\Eren Akash\Downloads\3a.jpg" alt="Travel Services">
+                </div>
+                <h4>Travel Services</h4>
+                <p>Pick-up/drop</p>
+            </div>
+
+            <div class="container-box">
+                <div class="container-image">
+                    <img src="C:\Users\Eren Akash\Downloads\4a.jpg" alt="Hotel Services">
+                </div>
+                <h4>Hotel Services</h4>
+                <p>Check-in/out</p>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section class="locations" id="locations">
+        <div class="package-title">
+            <h2>Locations</h2>
+        </div>
+
+        <div class="location-content">
+
+            <a href="./locations.html#kashmir" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l1.jpg" alt="">
+                    <h5>India</h5>
+                    <p>Kashmir</p>
+                </div>
+            </a>
+            <a href="./locations.html#istanbul" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l2.jpg" alt="">
+                    <h5>Turkey</h5>
+                    <p>Istanbul</p>
+                </div>
+            </a>
+
+            <a href="./locations.html#paris" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l3.jpg" alt="">
+                    <h5>France</h5>
+                    <p>Paris</p>
+                </div>
+            </a>
+
+            <a href="./locations.html#bali" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l4.jpg" alt="">
+                    <h5>Indonesia</h5>
+                    <p>Bali</p>
+                </div>
+            </a>
+
+            <a href="./locations.html#dubai" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l5.jpg" alt="">
+                    <h5>United Arab Emirates</h5>
+                    <p>Dubai</p>
+                </div>
+            </a>
+
+            <a href="./locations.html#geneva" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l6.jpg" alt="">
+                    <h5>Switzerland</h5>
+                    <p>Geneva</p>
+                </div>
+            </a>
+
+            <a href="./locations.html#port-blair" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l7.jpg" alt="">
+                    <h5>Andaman & Nicobar</h5>
+                    <p>Port Blair</p>
+                </div>
+            </a>
+
+            <a href="./locations.html#rome" target="_blank">
+                <div class="col-content">
+                    <img src="C:\Users\Eren Akash\Downloads\l8.jpg" alt="">
+                    <h5>Italy</h5>
+                    <p>Rome</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="testimonial-slider" id="testimonials">
+        <div class="testimonial-title">
+            <h2>What Our Travelers Say</h2>
+        </div>
+
+        <div class="testimonial-carousel">
+            <div class="testimonial-card active">
+                <p>"Absolutely loved the Kashmir trip! The scenic beauty was breathtaking, and everything from travel to
+                    stay was perfectly organized. I’d definitely recommend this to all nature lovers."</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h4>- Ananya R.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Bali was stunning! The beachside resort was dreamy and the activities arranged kept us excited every
+                    day. Great support from the travel team throughout."</p>
+                <div class="stars">⭐⭐⭐⭐☆</div>
+                <h4>- Rohan M.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Paris was magical. The local guide was very knowledgeable, and the Eiffel Tower at night was
+                    surreal. I also enjoyed the local cuisine suggested in our itinerary."</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h4>- Priya K.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Our Geneva trip was smooth and peaceful. The lakeside hotel view was amazing, and everything was
+                    well-managed. I really liked the punctuality and coordination."</p>
+                <div class="stars">⭐⭐⭐⭐☆</div>
+                <h4>- Vikas P.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Rome was rich in history and absolutely stunning. Our travel planner helped us skip long queues at
+                    major sites. A must-visit if you love culture and art."</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h4>- Meera S.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Istanbul was the perfect blend of tradition and modern life. The food, shopping, and friendly locals
+                    made this trip unforgettable. Special thanks to our trip manager."</p>
+                <div class="stars">⭐⭐⭐⭐☆</div>
+                <h4>- Aditya B.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Dubai is just luxury at its best. The desert safari, skyscrapers, and luxury hotels made our
+                    honeymoon extra special. Great value for money."</p>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <h4>- Zoya N.</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"Port Blair was serene and clean. We especially loved the underwater activities and the calm beach
+                    vibes. It was an offbeat experience, but totally worth it."</p>
+                <div class="stars">⭐⭐⭐⭐☆</div>
+                <h4>- Manish D.</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <h2>Contact Us</h2>
+            <form action="#" method="post" class="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Write your message here..."
+                        required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+
+    <section class="footer">
+        <div class="foot">
+            <div class="footer-content">
+                <div class="footlinks">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="">Register</a></li>
+                        <li><a href="">About Us</a></li>
+                        <li><a href="">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footlinks">
+                    <h4>Connect</h4>
+                    <div class="social">
+                        <a href=""><i class='bx bxl-facebook'></i></a>
+                        <a href=""><i class='bx bxl-instagram'></i></a>
+                        <a href=""><i class='bx bxl-twitter'></i></a>
+                        <a href=""><i class='bx bxl-linkedin'></i></a>
+                        <a href=""><i class='bx bxl-youtube'></i></a>
+                        <a href=""><i class='bx bxl-wordpress'></i></a>
+                        <a href=""><i class='bx bxl-github'></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="end">
+            <p>Copyright © 2025 Vista Travels All Rights Reserved.<br>Website developed by: Sachin Kumar</p>
+        </div>
+    </section>
+
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" required />
+                <label>Password</label>
+                <input type="password" placeholder="Enter your password" required />
+                <button type="submit">Login</button>
+                <p>Don't have an account? <a onclick="switchModal('loginModal', 'signupModal')">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Sign Up</h2>
+            <form>
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your name" required />
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" required />
+                <label>Password</label>
+                <input type="password" placeholder="Create password" required />
+                <button type="submit">Register</button>
+                <p>Already have an account? <a onclick="switchModal('signupModal', 'loginModal')">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!--  -->
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchModal(fromId, toId) {
+            closeModal(fromId);
+            openModal(toId);
+        }
+
+        // 
+        const cards = document.querySelectorAll('.testimonial-card');
+        let current = 0;
+
+        function showNextCard() {
+            cards[current].classList.remove('active');
+            current = (current + 1) % cards.length;
+            cards[current].classList.add('active');
+        }
+
+        setInterval(showNextCard, 7000);
+    </script>
+</body>
+
+</html>
